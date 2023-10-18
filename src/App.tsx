@@ -18,7 +18,7 @@ function App(): ReactElement {
         <Divider className='divider'/>
         <Content className='content'>
           <Routes>
-            <Route path="/" element={<RouteList />} >
+            <Route path="/saunterrr" element={<RouteList />} >
               <Route path="/route/:id" element={<RouteDetails />} />
             </Route>
           </Routes>
