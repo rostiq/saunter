@@ -16,3 +16,8 @@ export interface AddRouteType {
     fullDescription?: string;
     length?: number;
 }
+
+export interface RouteProps {
+  route: Route;
+  isActive?: boolean;
+}

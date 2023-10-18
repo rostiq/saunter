@@ -1,74 +1,77 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Form, Input, Button, Card } from 'antd';
-import { Route } from '../types'; // Define your Route type
-import { addRoute } from '../features/routes/routeSlice';
-
+import { Button, Divider, Flex, Input, Modal } from 'antd';
+import { Space, Typography } from 'antd';
+import { EnvironmentOutlined } from '@ant-design/icons';
+import { addNewDocument } from '../services/firebase';
+import { useNavigate } from 'react-router-dom';
+import Map from './Map';
+const { Text } = Typography;
 const { TextArea } = Input;
 
-interface AddRouteFormProps {
-}
+const AddRoute: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState('');
+  const [shortDescription, setShortDescription] = useState('');
+  const [fullDescription, setFullDescription] = useState('');
+  const [length, setLength] = useState(0);
+  const [isModal, setIsModal] = useState(false);
 
-const AddRouteForm: React.FC<AddRouteFormProps> = () => {
-  const dispatch = useDispatch();
+  const navigate = useNavigate()
 
-  const [formData, setFormData] = useState<Route>({
-    title: '',
-    shortDescription: '',
-    fullDescription: '',
-    length: 0,
-    isFavorite: false,
-  });
+  const handleOpenModal = () => {
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("💅🏼 ~ e:", e)
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  }
+  const handleCloseModal = () => {
+    navigate('/')
+  }
 
-  const handleAddRoute = () => {
-    dispatch(addRoute(formData));
+  const handleSubmit = async () => {
+    setLoading(true);
+    await addNewDocument({ title, shortDescription, fullDescription, length });
+    setLoading(false);
   };
 
   return (
-    <Card title="Add a New Route">
-      <Form>
-        <Form.Item label="Name">
-          <Input
-            name="name"
-            value={formData.title}
-            onChange={handleInputChange}
-          />
-        </Form.Item>
-        <Form.Item label="Short Description">
-          <Input
-            name="shortDescription"
-            value={formData.shortDescription}
-            onChange={handleInputChange}
-          />
-        </Form.Item>
-        <Form.Item label="Full Description">
-          <TextArea
-            name="fullDescription"
-            value={formData.fullDescription}
-            // onChange={handleInputChange}
-          />
-        </Form.Item>
-        <Form.Item label="Length (miles)">
-          <Input
-            type="number"
-            name="length"
-            value={formData.length}
-            onChange={handleInputChange}
-          />
-        </Form.Item>
-        {/* MAP */}
-        <Button onClick={handleAddRoute}>Add Route</Button>
-      </Form>
-    </Card>
+      <Modal
+        title="Add new path"
+        open={true}
+        confirmLoading={loading}
+        width={'80vw'}
+        footer={null}
+        onCancel={handleCloseModal}
+      >
+        <Divider />
+        <Flex gap="large" align="start" justify="center" >
+
+          {/* FORM */}
+
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Text>Title</Text>
+            <Input placeholder="Text input" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <Text>Short description</Text>
+            <TextArea autoSize={{ minRows: 2, maxRows: 4 }} maxLength={160} showCount placeholder="Text area" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)} />
+            <Text>Full description</Text>
+            <TextArea autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Text area" value={fullDescription} onChange={(e) => setFullDescription(e.target.value)} />
+            <Space direction="vertical" align='center' style={{ width: '100%' }}>
+              <Space>
+                <EnvironmentOutlined />
+                <Text>Length {length} km</Text>
+              </Space>
+              <Button type="primary" onClick={handleSubmit} loading={loading}>
+                Add Path
+              </Button>
+            </Space>
+          </Space>
+
+          {/* MAP */}
+
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Map />
+          </Space>
+
+        </Flex>
+      </Modal>
   );
 };
 
-export default AddRouteForm;
+export default AddRoute;
