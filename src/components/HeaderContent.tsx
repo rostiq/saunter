@@ -43,7 +43,7 @@ const HeaderContent = () => {
         <>
             <Flex gap="small" justify="center">
                 <FullscreenOutlined className="logo" />
-                <span className="logo">SAUNTER</span>
+                <span className="logo">SAUNTERRR</span>
             </Flex>
             <Button type="primary" onClick={openModal}>
                 Add Path
