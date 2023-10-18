@@ -1,10 +1,12 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import routeReducer from '../features/routes/routeSlice';
+import distanceReducer from '../features/routes/distanceSlice';
 
 
 export const store = configureStore({
   reducer: {
     routes: routeReducer,
+    distance: distanceReducer,
   },
 });
 

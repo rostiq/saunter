@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Divider, Layout } from 'antd';
 import RouteList from './components/RouteList';
 import RouteDetails from './components/RouteDetails';
-import AddRouteForm from './components/AddRouteForm';
 import { Header } from 'antd/es/layout/layout';
 import HeaderContent from './components/HeaderContent';
 
@@ -16,13 +15,12 @@ function App(): ReactElement {
         <Header className='header'>
           <HeaderContent />
         </Header>
-        <Divider />
+        <Divider className='divider'/>
         <Content className='content'>
           <Routes>
             <Route path="/" element={<RouteList />} >
               <Route path="/route/:id" element={<RouteDetails />} />
             </Route>
-            <Route path="/add" element={<AddRouteForm />} />
           </Routes>
         </Content>
       </Layout>

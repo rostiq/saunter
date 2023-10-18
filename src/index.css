@@ -1,5 +1,5 @@
 :root {
-  --background-primarry: #ffffff;
+  --background-primary: #ffffff;
   --background-secondary: #f5f5f5;
   --text-primary: #000000;
   --text-secondary: #ffffff;
@@ -23,20 +23,19 @@ code {
 
 .layout {
   height: 100vh;
-  background-color: var(--background-primarry);
-  background-color: var(--background-secondary);
+  background-color: var(--background-primary);
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--white);
+  background-color: var(--background-primary);
+
 }
 
 .content {
   padding: 16px 48px; 
-  height: calc(100vh - 64px);
 }
 
 .logo {

@@ -18,6 +18,11 @@ const RouteList: React.FC<RouteListProps> = () => {
   const dispatch = useAppDispatch();
   const setRoutes = (value: Route[]) => dispatch(fetchRoutes(value));
 
+  const params = useParams<{ id: string }>();
+
+  const isMainPage = !params.id;
+
+
   useEffect(() => {
     onSnapshot(routesCollection, (snapshot: QuerySnapshot<DocumentData>) => {
       setRoutes(snapshot.docs.map((doc) => {
@@ -31,33 +36,43 @@ const RouteList: React.FC<RouteListProps> = () => {
 
   const [searchText, setSearchText] = useState('');
 
-  const filteredRoutes = routes.filter((route) =>
-    route.title?.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const filteredRoutes = routes
+  .filter((route) => route.title?.toLowerCase().includes(searchText.toLowerCase()))
+  .sort((routeA, routeB) => {
+    if (routeA.isFavorite && !routeB.isFavorite) {
+      return -1;
+    }
+    if (!routeA.isFavorite && routeB.isFavorite) {
+      return 1;
+    }
+    return 0;
+  });
 
   const handleSearch = (value: string) => {
     setSearchText(value);
   };
 
   return (
-    <Flex gap="large" align="center" justify="start" >
+    <Flex gap="large" align="start" justify="start" >
 
-      <Space direction="vertical" style={{ width: '40%', }} size={['large', 'large']}>
+      <Space direction="vertical" style={{ width: '40%' }} size={['large', 'large']}>
         <Search placeholder="Search..." onSearch={handleSearch} />
         <List
-          style={{ height: '100%', overflow: 'auto', borderRadius: '0.5rem',  }}
+          style={{ height: '74vh', overflow: 'auto', borderRadius: '0.5rem',  }}
           grid={{ column: 1 }}
           dataSource={filteredRoutes}
           renderItem={(route) => (
             <List.Item >
               <Link to={`/route/${route.id}`}>
-                <RouteItem route={route} />
+                <RouteItem route={route} isActive={route.id === params.id}/>
               </Link>
             </List.Item>
           )}
         />
 
       </Space>
+
+      {isMainPage && 'Select any path'}
 
       <Outlet/>
 

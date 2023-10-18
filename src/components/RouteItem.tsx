@@ -12,11 +12,7 @@ const { Text } = Typography;
 
 const RouteItem: React.FC<RouteProps> = ({ route, isActive }) => {
 
-  const { title, shortDescription, length, isFavorite, id } = route;
-
-  const isActiveStyles = {
-    color: isActive ? 'white' : 'inherit'
-  }
+  const { title, shortDescription, length, isFavorite } = route;
 
   return (
     <Card size="small" style={{width: '100%', backgroundColor: isActive? '#1677ff' : '#f5f5f5', cursor: 'pointer' }}  >

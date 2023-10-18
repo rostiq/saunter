@@ -1,6 +1,6 @@
 
 import { initializeApp } from "firebase/app";
-import { addDoc, collection,getFirestore } from "firebase/firestore";
+import { addDoc, collection, getFirestore, doc, deleteDoc, setDoc } from "firebase/firestore";
 import { AddRouteType, Route } from "../types";
 
 const firebaseConfig = {
@@ -17,20 +17,32 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const firestore =  getFirestore(app);
+const firestore = getFirestore(app);
 
 export const routesCollection = collection(firestore, "routes");
 
-// Add new document
-
 export const addNewDocument = async (data: AddRouteType) => {
   try {
-    const docRef = await addDoc(routesCollection, {...data});
-    console.log("💅🏼 ~ docRef:", docRef)
+    const docRef = await addDoc(routesCollection, { ...data });
   } catch (error) {
     console.error("Error adding document: ", error);
   }
 };
 
-// remove document?
+export const deleteDocument = async (id: string) => {
+  try {
+    const docRef = doc(firestore, `routes/${id}`);
+    await deleteDoc(docRef);
+  } catch (error) {
+    console.error("Error deleting document: ", error);
+  }
+}
 
+export const updateDocument = async (id: string, data: AddRouteType) => {
+  try {
+    const docRef = doc(firestore, `routes/${id}`);
+    await setDoc(docRef, data, { merge: true });
+  } catch (error) {
+    console.error("Error updating document: ", error);
+  }
+}
