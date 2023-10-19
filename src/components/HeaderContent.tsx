@@ -25,18 +25,22 @@ const HeaderContent = () => {
     const markers = useAppSelector(selectMarkers);
 
     const handleCloseModal = () => {
+        setTitle('');
+        setShortDescription('');
+        setFullDescription('');
         setIsModal(false);
-        navigate('/')
     }
 
     const handleSubmit = async () => {
         setLoading(true);
         await addNewDocument({ title, shortDescription, fullDescription, length, markers, });
         setLoading(false);
+        handleCloseModal();
+        navigate('/')
     };
     const openModal = () => {
         setIsModal(true);
-    }
+    };
     return (
         <>
             <Flex gap="small" justify="center">
