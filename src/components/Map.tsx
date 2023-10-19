@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, Marker, useJsApiLoader, DirectionsRenderer } from '@react-google-maps/api';
 import { useAppDispatch } from '../app/hooks';
-import { updateTotalLength } from '../features/routes/distanceSlice';
+import { updateMarkers, updateTotalLength } from '../features/routes/distanceSlice';
 
 const containerStyle = {
   width: '100%',
@@ -51,6 +51,10 @@ const Map: React.FC = () => {
     dispatch(updateTotalLength(totalDistance / 1000));
   }, [totalDistance]);
 
+  useEffect(() => {
+    dispatch(updateMarkers(markers));
+  },[markers]);
+
   const addMarker = (event: google.maps.MapMouseEvent) => {
     const newMarkers = [...markers];
     newMarkers.push({
@@ -99,7 +103,7 @@ const Map: React.FC = () => {
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={9}
+      zoom={19}
       onLoad={(map) => setMyMap(map)}
       onClick={addMarker}
     >

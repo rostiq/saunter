@@ -7,7 +7,7 @@ import { EnvironmentOutlined } from '@ant-design/icons';
 import { addNewDocument } from '../services/firebase';
 import { useNavigate } from 'react-router-dom';
 import Map from './Map';
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useAppSelector } from "../app/hooks";
 import { selectMarkers, selectTotalLength } from "../features/routes/distanceSlice";
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -18,11 +18,10 @@ const HeaderContent = () => {
     const [title, setTitle] = useState('');
     const [shortDescription, setShortDescription] = useState('');
     const [fullDescription, setFullDescription] = useState('');
-    const [length, setLength] = useState(0);
 
     const navigate = useNavigate()
 
-    const totalDistance = useAppSelector(selectTotalLength);
+    const length = useAppSelector(selectTotalLength);
     const markers = useAppSelector(selectMarkers);
 
     const handleCloseModal = () => {
@@ -32,7 +31,7 @@ const HeaderContent = () => {
 
     const handleSubmit = async () => {
         setLoading(true);
-        await addNewDocument({ title, shortDescription, fullDescription, length, markers: [] });
+        await addNewDocument({ title, shortDescription, fullDescription, length, markers, });
         setLoading(false);
     };
     const openModal = () => {
@@ -71,7 +70,7 @@ const HeaderContent = () => {
                             <Space direction="vertical" align='center' style={{ width: '100%' }}>
                                 <Space>
                                     <EnvironmentOutlined />
-                                    <Text>Length {totalDistance} km</Text>
+                                    <Text>Length {length} km</Text>
                                 </Space>
                                 <Button type="primary" onClick={handleSubmit} loading={loading}>
                                     Add Path
