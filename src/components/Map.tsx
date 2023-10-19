@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GoogleMap, Marker, useJsApiLoader, DirectionsRenderer } from '@react-google-maps/api';
 import { useAppDispatch } from '../app/hooks';
 import { updateTotalLength } from '../features/routes/distanceSlice';
@@ -11,7 +11,7 @@ const containerStyle = {
 };
 
 interface MarkerType {
-  position: google.maps.LatLngLiteral;
+  position: any;
   isDraggable: boolean;
 }
 
@@ -20,40 +20,41 @@ const Map: React.FC = () => {
     googleMapsApiKey: 'AIzaSyAY6ckNC8L_v0U5NeyXm5O2qKqajNJ67R8',
   });
 
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [markers, setMarkers] = useState<MarkerType[]>([]);
-  const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
-  const [totalDistance, setTotalDistance] = useState<number>(0);
-  const center={ lat: 50.4501, lng: 30.5234 }
+  const center = { lat: 50.4501, lng: 30.5234 };
 
-const dispatch = useAppDispatch();
+  const [myMap, setMyMap] = useState<any>(null);
+  const [markers, setMarkers] = useState<MarkerType[]>([]);
+  const [directions, setDirections] = useState<any>(null);
+  const [totalDistance, setTotalDistance] = useState<number>(0);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (isLoaded) {
-      const mapBounds = new window.google.maps.LatLngBounds();
+      const mapBounds = new google.maps.LatLngBounds();
       markers.forEach(({ position }) => {
-        mapBounds.extend(position?? center);
+        mapBounds.extend(position);
       });
-      if (map) {
-        map.fitBounds(mapBounds);
+      if (myMap) {
+        myMap.fitBounds(mapBounds);
       }
     }
-  }, [isLoaded, markers, map]);
+  }, [isLoaded, markers, myMap]);
 
   useEffect(() => {
     if (markers.length >= 2) {
-        calculateDistance();
+      calculateDistance();
     }
   }, [markers]);
 
-//   useEffect(() => {
-//     dispatch(updateTotalLength(totalDistance/1000));
-//   },[totalDistance])
+  useEffect(() => {
+    dispatch(updateTotalLength(totalDistance / 1000));
+  }, [totalDistance]);
 
   const addMarker = (event: google.maps.MapMouseEvent) => {
     const newMarkers = [...markers];
     newMarkers.push({
-      position: event.latLng?.toJSON()?? center,
+      position: event.latLng?.toJSON() || center,
       isDraggable: true,
     });
     setMarkers(newMarkers);
@@ -61,13 +62,13 @@ const dispatch = useAppDispatch();
 
   const onMarkerDragEnd = (markerIndex: number, event: google.maps.MapMouseEvent) => {
     const newMarkers = [...markers];
-    newMarkers[markerIndex].position = event.latLng?.toJSON()?? center;
+    newMarkers[markerIndex].position = event.latLng?.toJSON() || center;
     setMarkers(newMarkers);
   };
 
   const calculateDistance = () => {
     if (markers.length >= 2) {
-      const directionsService = new window.google.maps.DirectionsService();
+      const directionsService = new google.maps.DirectionsService();
       const waypoints = markers.map((marker) => ({
         location: marker.position,
         stopover: true,
@@ -85,7 +86,7 @@ const dispatch = useAppDispatch();
             setDirections(result);
             let totalDistance = 0;
             result?.routes[0].legs.forEach((leg) => {
-              totalDistance += leg?.distance?.value ?? 0;
+              totalDistance += leg?.distance?.value || 0;
             });
             setTotalDistance(totalDistance);
           }
@@ -95,23 +96,23 @@ const dispatch = useAppDispatch();
   };
 
   return (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={9}
-          onLoad={(map) => setMap(map)}
-          onClick={addMarker}
-        >
-          {markers.map((marker, index) => (
-            <Marker
-              key={index}
-              position={marker.position}
-              draggable={marker.isDraggable}
-              onDragEnd={(event) => onMarkerDragEnd(index, event)}
-            />
-          ))}
-          {directions && <DirectionsRenderer directions={directions} />}
-        </GoogleMap>
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={9}
+      onLoad={(map) => setMyMap(map)}
+      onClick={addMarker}
+    >
+      {markers.map((marker, index) => (
+        <Marker
+          key={index}
+          position={marker.position}
+          draggable={marker.isDraggable}
+          onDragEnd={(event) => onMarkerDragEnd(index, event)}
+        />
+      ))}
+      {directions && <DirectionsRenderer directions={directions} />}
+    </GoogleMap>
   );
 };
 

@@ -10,14 +10,14 @@ const { Content } = Layout;
 
 function App(): ReactElement {
   return (
-    <Router>
+    <Router basename='/saunterrr'>
       <Layout className='layout'>
         <Header className='header'>
           <HeaderContent />
         </Header>
         <Divider className='divider'/>
         <Content className='content'>
-          <Routes basename="/saunterrr">
+          <Routes >
             <Route path="/" element={<RouteList />} >
               <Route path="/route/:id" element={<RouteDetails />} />
             </Route>

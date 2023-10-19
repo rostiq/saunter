@@ -24,7 +24,6 @@ const HeaderContent = () => {
 
     const totalDistance = useAppSelector(selectTotalLength);
     const markers = useAppSelector(selectMarkers);
-    console.log("💅🏼 ~ markers:", markers)
 
     const handleCloseModal = () => {
         setIsModal(false);
