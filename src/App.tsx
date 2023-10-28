@@ -5,6 +5,7 @@ import RouteList from './components/RouteList';
 import RouteDetails from './components/RouteDetails';
 import { Header } from 'antd/es/layout/layout';
 import HeaderContent from './components/HeaderContent';
+import MyMap from './components/MyMap';
 
 const { Content } = Layout;
 
@@ -21,6 +22,7 @@ function App(): ReactElement {
             <Route path="/" element={<RouteList />} >
               <Route path="/route/:id" element={<RouteDetails />} />
             </Route>
+              <Route path="/map" element={<MyMap />} />
           </Routes>
         </Content>
       </Layout>

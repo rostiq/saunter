@@ -5,8 +5,8 @@ import { Route, RouteDetailsProps } from '../types';
 import { addToFavorites, removeRoute, selectRouteById } from '../features/routes/routeSlice';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import Paragraph from "antd/es/typography/Paragraph";
-import Map from './Map';
 import { deleteDocument, updateDocument } from '../services/firebase';
+import MyMap from './MyMap';
 
 const { Title, Text } = Typography;
 
@@ -40,7 +40,7 @@ const RouteDetails: React.FC<RouteDetailsProps> = () => {
         <Text style={{ fontSize: '1rem', fontWeight: 'bold', margin: '0' }}>{route.length} km</Text>
       </Flex>
       <Paragraph style={{ marginBottom: '0', width: '100%', textAlign: 'justify' }}>{route.fullDescription}</Paragraph>
-      <Map />
+      <MyMap />
       <Text underline style={{ color: "#1677ff", textAlign: 'right', width: '100%', cursor: 'pointer' }} onClick={handleAddToFavorites}>{route.isFavorite? 'Remove from favorites': 'Add to favorites'}</Text>
       <Text type="danger" underline style={{ textAlign: 'right', width: '100%', cursor: 'pointer' }} onClick={handleRemoveRoute}>Remove</Text>
     </Flex>);

@@ -31,7 +31,6 @@ export interface RouteProps {
 
 export interface MarkerType {
   position: google.maps.LatLngLiteral;
-  isDraggable: boolean;
 }
 
 export interface Distance {
@@ -39,3 +38,8 @@ export interface Distance {
   markers: MarkerType[];
 }
 
+export type GooglePolylineRoute = {
+  polyline: {
+    encodedPolyline: string;
+  };
+};

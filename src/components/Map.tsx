@@ -66,7 +66,7 @@ const Map: React.FC = () => {
 
   const onMarkerDragEnd = (markerIndex: number, event: google.maps.MapMouseEvent) => {
     const newMarkers = [...markers];
-    newMarkers[markerIndex].position = event.latLng?.toJSON() || center;
+    newMarkers[markerIndex].position = event.latLng?.toJSON()
     setMarkers(newMarkers);
   };
 
