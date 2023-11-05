@@ -1,6 +1,6 @@
 import { Button, Flex } from "antd"
 import React, { useState } from 'react';
-import { Divider, Input, Modal } from 'antd';
+import { Input } from 'antd';
 import { Space, Typography } from 'antd';
 import { EnvironmentOutlined } from '@ant-design/icons';
 import { addNewDocument } from '../services/firebase';
@@ -8,11 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from "../app/hooks";
 import { selectMarkers, selectTotalLength } from "../features/routes/distanceSlice";
 import MyMap from "./MyMap";
-import GoogleMapComponent from "./MyMap";
 const { Text } = Typography;
 const { TextArea } = Input;
 const AddForm = () => {
-    const [isModal, setIsModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('');
     const [shortDescription, setShortDescription] = useState('');
@@ -27,7 +25,6 @@ const AddForm = () => {
         setTitle('');
         setShortDescription('');
         setFullDescription('');
-        setIsModal(false);
     }
 
     const handleSubmit = async () => {
@@ -37,51 +34,35 @@ const AddForm = () => {
         handleCloseModal();
         navigate('/')
     };
-    const openModal = () => {
-        setIsModal(true);
-    };
+
     return (
         <>
-            <Button type="primary" onClick={openModal}>
-                Add Path
-            </Button>
-            {isModal &&
-                <Modal
-                    title="Add new path"
-                    open={true}
-                    confirmLoading={loading}
-                    footer={null}
-                    onCancel={handleCloseModal}
-                    width={'80vw'}
-                >
-                    <Divider />
-                    <Flex gap="large" align="start" justify="start" >
 
-                        {/* FORM */}
+            <Flex gap="large" align="start" justify="start" >
 
-                        <Space direction="vertical" style={{ width: '40%' }}>
-                            <Text>Title</Text>
-                            <Input placeholder="Text input" value={title} onChange={(e) => setTitle(e.target.value)} />
-                            <Text>Short description</Text>
-                            <TextArea autoSize={{ minRows: 2, maxRows: 4 }} maxLength={160} showCount placeholder="Text area" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)} />
-                            <Text>Full description</Text>
-                            <TextArea autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Text area" value={fullDescription} onChange={(e) => setFullDescription(e.target.value)} />
-                            <Space direction="vertical" align='center' style={{ width: '100%' }}>
-                                <Space>
-                                    <EnvironmentOutlined />
-                                    <Text>Length {length} km</Text>
-                                </Space>
-                                <Button type="primary" onClick={handleSubmit} loading={loading}>
-                                    Add Path
-                                </Button>
-                            </Space>
+                {/* FORM */}
+
+                <Space direction="vertical" style={{ width: '40%' }}>
+                    <Text>Title</Text>
+                    <Input placeholder="Text input" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <Text>Short description</Text>
+                    <TextArea autoSize={{ minRows: 2, maxRows: 4 }} maxLength={160} showCount placeholder="Text area" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)} />
+                    <Text>Full description</Text>
+                    <TextArea autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Text area" value={fullDescription} onChange={(e) => setFullDescription(e.target.value)} />
+                    <Space direction="vertical" align='center' style={{ width: '100%' }}>
+                        <Space>
+                            <EnvironmentOutlined />
+                            <Text>Length {length} km</Text>
                         </Space>
+                        <Button type="primary" onClick={handleSubmit} loading={loading}>
+                            Add Path
+                        </Button>
+                    </Space>
+                </Space>
 
-                        {/* MAP */}
-                            <MyMap  />
-                    </Flex>
-                </Modal>
-            }
+                {/* MAP */}
+                <MyMap />
+            </Flex>
         </>
     )
 }
